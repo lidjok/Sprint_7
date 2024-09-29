@@ -28,7 +28,6 @@ class TestCreateOrder:
         }
 
         r = requests.post(f"{url}/api/v1/orders", json=payload)
-        print(r.text)
         assert r.status_code == 201
         assert 'track' in r.json()
 

@@ -1,6 +1,5 @@
 import requests
 import allure
-import pytest
 from data.URL import url
 from data.courier_data import register_new_courier_and_return_login_password
 

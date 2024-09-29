@@ -1,13 +1,12 @@
 import requests
 import allure
-import pytest
 from data.URL import url
 
 class TestGetListOfOrders:
 
 
     @allure.title('Получение списка заказов')
-    @allure.description('Получение списка заказов (код - 200 и oders в ответе)')
+    @allure.description('Получение списка заказов (код - 200 и "orders" в ответе)')
     def test_create_order_two(self):
 
         payload = {
