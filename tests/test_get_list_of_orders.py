@@ -7,7 +7,7 @@ class TestGetListOfOrders:
 
     @allure.title('Получение списка заказов')
     @allure.description('Получение списка заказов (код - 200 и "orders" в ответе)')
-    def test_create_order_two(self):
+    def test_get_list_of_orders(self):
 
         payload = {
             "firstName": "Naruto",
