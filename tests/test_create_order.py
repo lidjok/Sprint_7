@@ -11,7 +11,7 @@ class TestCreateOrder:
         ['BLACK', 'GRAY'],
         []
     ])
-    @allure.title('Авторизация курьера')
+    @allure.title('Создание заказа')
     @allure.description('Проверка создания заказа (код - 201 и track в ответе)')
     def test_create_order(self, color):
 

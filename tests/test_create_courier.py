@@ -28,7 +28,7 @@ class TestCreateCourier:
         assert response.json() == {"ok": True}, "Неверное содержимое ответа."
 
 
-    @allure.title('Создание курьера')
+    @allure.title('Проверка невозможности создать курьера. дублирующие креды')
     @allure.description('Проверка, что нельзя создать курьера с уже существующеми кредами (код - 409 и текст - "message": "Этот логин уже используетсяПопробуйте другой."')
     def test_create_courier_duplicate_login(self, registered_courier_data):
         payload = registered_courier_data
@@ -38,9 +38,9 @@ class TestCreateCourier:
         assert response.json() == {"code": 409, "message": "Этот логин уже используется. Попробуйте другой."}, "Неверное содержимое ответа."
 
 
-    @allure.title('Создание курьера')
+    @allure.title('Проверка невозможности создать курьера. Не все обязательные поля')
     @allure.description(
-        'Проверка заполнения не всех обязательных полей. Курьер не создан (код - 409 и текст - "message": "Этот логин уже используется"')
+        'Проверка заполнения не всех обязательных полей. Курьер не создан (код - 400 и текст - "message": "Недостаточно данных для создания учетной записи"')
     def test_create_courier_without_password(self):
         data = generation_new_data_courier()
         payload = {
