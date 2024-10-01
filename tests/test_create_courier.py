@@ -8,7 +8,7 @@ from data.courier_data import register_new_courier_and_return_login_password
 @pytest.fixture
 def registered_courier_data():
     login_pass = register_new_courier_and_return_login_password()
-    return {
+    yield {
         "login": login_pass[0],
         "password": login_pass[1],
         "firstName": login_pass[2]
@@ -19,7 +19,6 @@ class TestCreateCourier:
     @allure.title('Создание курьера')
     @allure.step('Проверка создания курьера (код - 201 и текст - "ok": True')
     def test_create_courier(self):
-
         data = generation_new_data_courier()
         data.pop("firstName")
         payload = data
