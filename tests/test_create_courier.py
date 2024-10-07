@@ -14,6 +14,7 @@ def registered_courier_data():
         "firstName": login_pass[2]
     }
 
+
 class TestCreateCourier:
 
     @allure.title('Создание курьера')

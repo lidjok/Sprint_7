@@ -1,18 +1,28 @@
 import requests
+import pytest
 import allure
 from data.URL import url
 from data.courier_data import register_new_courier_and_return_login_password
+
+@pytest.fixture
+def delete_courier_data():
+    login_pass = register_new_courier_and_return_login_password()
+    yield {
+        "login": login_pass[0],
+        "password": login_pass[1]
+    }
+    response = requests.post(f"{url}/api/v1/courier/login", data=login_pass)
+    if response.status_code == 200:
+        courier_id = response.json().get("id")
+        if courier_id:
+            requests.delete(f"{url}/api/v1/courier/{courier_id}")
 
 
 class TestLoginCourier:
     @allure.title('Авторизация курьера')
     @allure.description('Проверка получения ID курьера при авторизации с корректным login и password (код - 200 и ID')
-    def test_get_courier_id(self):
-        login_pass = register_new_courier_and_return_login_password()
-        payload = {
-            "login": login_pass[0],
-            "password": login_pass[1]
-        }
+    def test_get_courier_id(self, delete_courier_data):
+        payload = delete_courier_data
         response = requests.post(f"{url}/api/v1/courier/login", data=payload)
 
         assert response.status_code == 200
