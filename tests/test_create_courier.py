@@ -4,11 +4,13 @@ import pytest
 from data.URL import url
 from data.courier_data import generation_new_data_courier
 from data.courier_data import register_new_courier_and_return_login_password
+import logging
+
 
 @pytest.fixture
 def registered_courier_data():
     login_pass = register_new_courier_and_return_login_password()
-    yield {
+    return {
         "login": login_pass[0],
         "password": login_pass[1],
         "firstName": login_pass[2]
@@ -19,13 +21,30 @@ class TestCreateCourier:
 
     @allure.title('Создание курьера')
     @allure.step('Проверка создания курьера (код - 201 и текст - "ok": True')
-    def test_create_courier(self):
+    def test_create_courier(self, registered_courier_data):
         data = generation_new_data_courier()
         data.pop("firstName")
         payload = data
+        logging.info(f"Data for courier creation: {data}")
+        print(data)
+
         response = requests.post(f"{url}/api/v1/courier", data=payload)
         assert response.status_code == 201
         assert response.json() == {"ok": True}, "Неверное содержимое ответа."
+
+        login_payload = {
+            "login": payload["login"],
+            "password": payload["password"]
+        }
+        login_response = requests.post(f"{url}/api/v1/courier/login", data=login_payload)
+        assert login_response.status_code == 200, "Login failed."
+
+        courier_id = login_response.json().get("id")
+        assert courier_id is not None, "Courier ID not found in login response."
+
+        # Delete the created courier
+        delete_response = requests.delete(f"{url}/api/v1/courier/{courier_id}")
+        assert delete_response.status_code == 200, "Failed to delete courier."
 
 
     @allure.title('Проверка невозможности создать курьера. дублирующие креды')
